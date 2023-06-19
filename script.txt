@@ -1,0 +1,74 @@
+DROP DATABASE If EXISTS  global_buisness_db;
+
+CREATE DATABASE global_buisness_db DEFAULT CHARACTER SET = 'utf8mb4';
+
+use global_buisness_db;
+
+CREATE TABLE `customer` (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `adress` varchar(45) NOT NULL,
+  `tel` varchar(45) NOT NULL,
+  `email` varchar(45) NOT NULL UNIQUE,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `employee` (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `adresse` varchar(45) NOT NULL,
+  `tel` varchar(45) NOT NULL,
+  `email` varchar(45) NOT NULL UNIQUE,
+  `poste` varchar(45) NOT NULL,
+  `salaire` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `product` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  `description` VARCHAR(45) NOT NULL,
+  `prix` INT(11) NOT NULL,
+  `qtite_en_stock` FLOAT NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `supplier` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `adresse` VARCHAR(45) NOT NULL,
+  `tel` VARCHAR(45) NOT NULL,
+  `email` VARCHAR(45) NOT NULL UNIQUE,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `order` (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `idCustomer` int(11) UNSIGNED NOT NULL,
+  `date` datetime NOT NULL,
+  `montant` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `idCustomer` FOREIGN KEY (`idCustomer`) REFERENCES `customer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `product_order`(
+id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+idProduct  INT(11) UNSIGNED NOT NULL,
+idOrder  INT(11) UNSIGNED NOT NULL,
+qtite FLOAT NOT NULL,
+PRIMARY KEY (`id`),
+CONSTRAINT product_order_prod FOREIGN KEY(idProduct) REFERENCES `product` (`id`),
+CONSTRAINT product_order_order FOREIGN KEY(idOrder) REFERENCES `order` (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `purchasse` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `date` DATETIME NOT NULL,
+  `idSupplier` INT(11) UNSIGNED NOT NULL,
+  `idProduct` INT(11) UNSIGNED NOT NULL,
+  `qtite` FLOAT NOT NULL,
+  `montant` FLOAT NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT purch_supl FOREIGN KEY(idSupplier) REFERENCES `supplier` (`id`),
+  CONSTRAINT purch_prod FOREIGN KEY(idProduct) REFERENCES `product` (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
